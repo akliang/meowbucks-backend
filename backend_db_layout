@@ -1,0 +1,68 @@
+* Table keys are marked with an asterisk
+
+
+Table 1: user_info
+•	Description:
+This table stores personal information about the user.
+User can log in with either username or email.
+
+•	Field names:
+-	email*
+-	username*
+-	password
+
+ 
+Table 2: purchases_tracking
+•	Description:
+This table records all the purchases entered by users that are still in the 30 day refund period. We need to archive the expired entries every day into the archive table.
+We will use unique product names from this table to call Amazon API and store the returned product information in the product_info table.
+
+•	Field names:
+-	username*
+-	item_number*
+-	item_name
+-	purchase_date
+-	starting_price
+
+
+Table 3: purchases_archive
+•	Description:
+This table records all the purchases entered by users that are not in the 30 day refund period anymore. 
+
+•	Field names:
+-	username*
+-	item_number*
+-	item_name
+-	purchase_date
+-	starting_price
+
+•	Possible daily archive query:
+SELECT DISTINCT item_number
+FROM purchases_tracking
+WHERE purchase_date < DATEADD(day, -30, GETDATE())
+
+
+Table 4: product_info
+•	Description:
+This table stores product information returned by the Amazon API call on the call date. Every day we need to archive everything into the price history table. 
+
+•	Field names:
+-	item_number*
+-	date
+-	price
+
+
+Table 5: price_history
+•	Description:
+This table archives product information returned by the Amazon API call every day from the product_info table. 
+
+•	Field names:
+-	item_number*
+-	date
+-	price
+
+
+
+
+
+
