@@ -1,0 +1,10 @@
+
+
+-- commands to populate sqlite database
+
+create table user_info(id integer primary key, email text, name text, password text);
+create table purchase_tracking(id integer primary key, emailid integer, item_number text, item_name text, purchase_date integer, starting_price real);
+create table purchase_archives as select * from purchase_tracking where 0;
+create table product_info(id integer primary key, item_number text, date integer, price real);
+create table product_history as select * from product_info where 0;
+
