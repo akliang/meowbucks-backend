@@ -8,7 +8,7 @@ User can log in with either username or email.
 
 •	Field names:
 -	email*
--	username*
+-	name
 -	password
 
  
@@ -18,7 +18,7 @@ This table records all the purchases entered by users that are still in the 30 d
 We will use unique product names from this table to call Amazon API and store the returned product information in the product_info table.
 
 •	Field names:
--	username*
+-	emailID*
 -	product_asin*
 -	product_name
 -	purchase_date
@@ -30,7 +30,7 @@ Table 3: purchases_archive
 This table records all the purchases entered by users that are not in the 30 day refund period anymore. 
 
 •	Field names:
--	username*
+-	emailID*
 -	product_asin*
 -	product_name
 -	purchase_date
@@ -48,11 +48,11 @@ This table stores product information returned by the Amazon API call on the cal
 
 •	Field names:
 -	product_asin*
-- product_name
+-	product_name
 -	date
 -	price
-- medium_image_url
-- offer_url
+-	medium_image_url
+-	offer_url
 
 
 Table 5: price_history
@@ -61,11 +61,11 @@ This table archives product information returned by the Amazon API call every da
 
 •	Field names:
 -	product_asin*
-- product_name
+-	product_name
 -	date
 -	price
-- medium_image_url
-- offer_url
+-	medium_image_url
+-	offer_url
 
 
 
