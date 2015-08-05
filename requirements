@@ -1,0 +1,5 @@
+amazonAPI.py required libraries:
+ - bottlenose
+ - dateutils
+ - lxml (if using mac, run "xcode-select --install" in terminal before installing lxml library)
+ - python-amazon-simple-product-api (https://github.com/yoavaviram/python-amazon-simple-product-api)
