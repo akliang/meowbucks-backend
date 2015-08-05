@@ -3,6 +3,8 @@
 Meow Bucks Backend
 
 - MySQL generating code
-- Python script
+- Python scripts
+
+
 
 
