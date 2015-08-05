@@ -7,7 +7,8 @@ This table stores personal information about the user.
 User can log in with either username or email.
 
 •	Field names:
--	email*
+-	ID*
+-	email
 -	name
 -	password
 
@@ -19,7 +20,7 @@ We will use unique product names from this table to call Amazon API and store th
 
 •	Field names:
 -	emailID*
--	product_asin*
+-	product_asin
 -	product_name
 -	purchase_date
 -	starting_price
@@ -31,7 +32,7 @@ This table records all the purchases entered by users that are not in the 30 day
 
 •	Field names:
 -	emailID*
--	product_asin*
+-	product_asin
 -	product_name
 -	purchase_date
 -	starting_price
