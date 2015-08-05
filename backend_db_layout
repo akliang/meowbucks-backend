@@ -19,8 +19,8 @@ We will use unique product names from this table to call Amazon API and store th
 
 •	Field names:
 -	username*
--	item_number*
--	item_name
+-	product_asin*
+-	product_name
 -	purchase_date
 -	starting_price
 
@@ -31,13 +31,13 @@ This table records all the purchases entered by users that are not in the 30 day
 
 •	Field names:
 -	username*
--	item_number*
--	item_name
+-	product_asin*
+-	product_name
 -	purchase_date
 -	starting_price
 
 •	Possible daily archive query:
-SELECT DISTINCT item_number
+SELECT DISTINCT product_isin
 FROM purchases_tracking
 WHERE purchase_date < DATEADD(day, -30, GETDATE())
 
@@ -47,9 +47,12 @@ Table 4: product_info
 This table stores product information returned by the Amazon API call on the call date. Every day we need to archive everything into the price history table. 
 
 •	Field names:
--	item_number*
+-	product_asin*
+- product_name
 -	date
 -	price
+- medium_image_url
+- offer_url
 
 
 Table 5: price_history
@@ -57,9 +60,12 @@ Table 5: price_history
 This table archives product information returned by the Amazon API call every day from the product_info table. 
 
 •	Field names:
--	item_number*
+-	product_asin*
+- product_name
 -	date
 -	price
+- medium_image_url
+- offer_url
 
 
 
