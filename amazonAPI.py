@@ -59,12 +59,22 @@ def call_API(asin):
         return price, asin, title, call_date, img, url
 
 
-# Updated table using data returned from api
-def update_product_table(c, asin, title, call_date, price, img, url):
-    query = """INSERT INTO product_cache
-            (product_asin, product_name, date, price, medium_image_url, offer_url) 
-            VALUES ('%s','%s','%s','%s','%s','%s')""" %(asin,title,call_date,price,img,url)
-    c.execute(query)
+## Updated table using data returned from api
+#def update_product_table(c, asin, title, call_date, price, img, url):
+#    query = """INSERT INTO product_cache
+#            (product_asin, product_name, date, price, medium_image_url, offer_url) 
+#            VALUES ('%s','%s','%s','%s','%s','%s')""" %(asin,title,call_date,price,img,url)
+#    c.execute(query)
+
+
+def insert_into_table(c,table_name,resp):
+    if table_name in ('product_history','product_cache'):
+        price, asin, title, call_date, img, url = resp
+        query = """INSERT INTO product_cache
+                (product_asin, product_name, date, price, medium_image_url, offer_url) 
+                VALUES ('%s','%s','%s','%s','%s','%s')""" %(asin,title,call_date,price,img,url)
+        c.execute(query)
+    return
 
 
 def main():
@@ -84,8 +94,10 @@ def main():
 
             resp = call_API(asin)
             if resp:
-                price, asin, title, call_date, img, url = resp
-                update_product_table(c, asin, title, call_date, price, img, url)
+                #price, asin, title, call_date, img, url = resp
+                #update_product_table(c, asin, title, call_date, price, img, url)
+                insert_into_table(c,'product_history',resp)
+                insert_into_table(c,'product_cache',resp)
                 successfully_updated += 1
             else:
                 logging.warning("Amazon did not find asin: %s" %(asin))
