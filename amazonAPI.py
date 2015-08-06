@@ -13,11 +13,10 @@ import init_db
 
 if os.path.exists('/Users/Sherry/meowbucks/'):
     homedir = '/Users/Sherry/meowbucks'
-    dbpath = "%s/mb_databases/mb_test_db.db" % (homedir)
 else:
     homedir='.'
-    dbpath = "%s/mb_databases/meow1.sqlite" % (homedir)
 
+dbpath = "%s/mb_databases/mb_test_db.db" % (homedir)
 logpath = "%s/log_files/apicall_log_%s.log" % (homedir,datetime.now().strftime("%Y_%m_%d_%H_%M"))
 
 # print('Homedir: '+homedir)

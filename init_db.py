@@ -4,16 +4,10 @@ import sqlite3
 
 def start(dbpath):
   # connect to sql database
-  #mb_database = sqlite3.connect('/Users/Sherry/meowbucks/mb_databases/meow1.sqlite')
   conn = sqlite3.connect(dbpath)
   c = conn.cursor()
   
   # Uncomment below section if want to create tables purchases_tracking and product_info from scratch
-  #c.execute('DELETE FROM user_info;')
-  #c.execute('DELETE FROM purchase_tracking;')
-  #c.execute('DELETE FROM purchase_archives;')
-  #c.execute('DELETE FROM product_info;')
-  #c.execute('DELETE FROM product_history;')
   c.execute('DROP TABLE IF EXISTS user_info')
   c.execute('DROP TABLE IF EXISTS purchase_tracking')
   c.execute('DROP TABLE IF EXISTS purchase_archives')
