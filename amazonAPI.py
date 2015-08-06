@@ -10,7 +10,7 @@ from datetime import date, datetime
 import logging
 
 # Create daily log file
-logging.basicConfig(filename='/Users/Sherry/meowbucks/log_files/%s.log' %(datetime.now()),
+logging.basicConfig(filename='/Users/Sherry/meowbucks/log_files/apicall_log_%s.log' %(datetime.now().strftime("%Y_%m_%d_%H_%M")),
                     level=logging.DEBUG)
 
 
@@ -36,14 +36,15 @@ def call_API(asin):
 
     product = amazon.lookup(ItemId = asin)
 
-    # fields returned from Amazon
-    price = product.price_and_currency[0]
-    title = product.title
-    call_date = date.today()
-    img = product.medium_image_url
-    url = product.offer_url
+    if product:
+        # fields returned from Amazon
+        price = product.price_and_currency[0]
+        title = product.title
+        call_date = date.today()
+        img = product.medium_image_url
+        url = product.offer_url
 
-    return price, asin, title, call_date, img, url
+        return price, asin, title, call_date, img, url
 
 
 # Updated table using data returned from api
@@ -82,12 +83,15 @@ def main():
     # Call api and update table
     if len(asin_list) > 0:
         for asin in asin_list:
-            try:
-                price, asin, title, call_date, img, url = call_API(asin)
+
+            resp = call_API(asin)
+            if resp:
+                price, asin, title, call_date, img, url = resp
                 update_product_table(c, asin, title, call_date, price, img, url)
-                updated_asin_list += 1
-            except:
-                logging.info("Invalid item for asin: %s" %(asin))
+                successfully_updated += 1
+            else:
+                logging.warning("Amazon did not find asin: %s" %(asin))
+                
 
     logging.info('%s asins were sent to api. %s asins successfully updated product table.' 
                 %((len(asin_list)), successfully_updated))
