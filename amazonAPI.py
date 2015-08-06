@@ -33,7 +33,7 @@ logging.basicConfig(filename=logpath,level=logging.DEBUG)
 def get_asin_list(c):
     asin_list = []
 
-    for row in c.execute('SELECT product_asin FROM purchase_tracking'):
+    for row in c.execute('SELECT DISTINCT product_asin FROM purchase_tracking'):
         row = row[0].encode('utf-8')
         asin_list.append(row)
 

@@ -32,6 +32,7 @@ def start(dbpath):
   c.execute('INSERT INTO user_info VALUES(1,"asdf@asdf.com","asdf","asdf")')
   c.execute("INSERT INTO purchase_tracking VALUES ('1', 'swagberry@meowbucks.com', 'B00QJDU3KY', 'Kindle', '3', '100')")
   c.execute("INSERT INTO purchase_tracking VALUES ('2', 'swagberry@meowbucks.com', 'B00JP7R8X6', 'Kindle Cover', '2', '10')")
+  c.execute("INSERT INTO purchase_tracking VALUES ('3', 'jojo@meowbucks.com', 'B00JP7R8X6', 'Kindle Cover', '2', '10')")
   conn.commit()
   conn.close()
 
