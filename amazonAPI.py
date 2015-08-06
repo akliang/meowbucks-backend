@@ -12,16 +12,17 @@ import os
 import init_db
 
 if os.path.exists('/Users/Sherry/meowbucks/'):
-  homedir='/Users/Sherry/meowbucks'
+    homedir = '/Users/Sherry/meowbucks'
+    dbpath = "%s/mb_databases/mb_test_db.db" % (homedir)
 else:
-  homedir='.'
-logpath="%s/log_files/apicall_log_%s.log" % (homedir,datetime.now().strftime("%Y_%m_%d_%H_%M"))
-dbpath="%s/mb_databases/meow1.sqlite" % (homedir)
+    homedir='.'
+    dbpath = "%s/mb_databases/meow1.sqlite" % (homedir)
 
-print('Homedir: '+homedir)
-print('Logpath: '+logpath)
-print('DBpath:  '+dbpath)
+logpath = "%s/log_files/apicall_log_%s.log" % (homedir,datetime.now().strftime("%Y_%m_%d_%H_%M"))
 
+# print('Homedir: '+homedir)
+# print('Logpath: '+logpath)
+# print('DBpath:  '+dbpath)
 
 
 # Create daily log file
@@ -41,13 +42,11 @@ def get_asin_list(c):
 
 # Call amazon api
 def call_API(asin):
-
     AMAZON_ACCESS_KEY = 'AKIAJ2MUVQ36XFWLYUEA'
     AMAZON_SECRET_KEY = '***REMOVED***z'
     AMAZON_ASSOC_TAG = 'meowbucks-20'
 
     amazon = AmazonAPI(AMAZON_ACCESS_KEY, AMAZON_SECRET_KEY, AMAZON_ASSOC_TAG)
-
     product = amazon.lookup(ItemId = asin)
 
     if product:
@@ -63,7 +62,6 @@ def call_API(asin):
 
 # Updated table using data returned from api
 def update_product_table(c, asin, title, call_date, price, img, url):
-
     query = """INSERT INTO product_info 
             (product_asin, product_name, date, price, medium_image_url, offer_url) 
             VALUES ('%s','%s','%s','%s','%s','%s')""" %(asin,title,call_date,price,img,url)
@@ -71,7 +69,6 @@ def update_product_table(c, asin, title, call_date, price, img, url):
 
 
 def main():
-
     init_db.start(dbpath)
 
     # Connect to sql database
