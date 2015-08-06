@@ -1,5 +1,5 @@
-''' This python module interacts with the purchase_tracking and product_info tables. 
-    1. select unique product_asin from the purchase_tracking table
+''' This python module interacts with the purchase_cache and product_info tables. 
+    1. select unique product_asin from the purchase_cache table
     2. call amazon API using asin to get product information
     3. populate the product_info page with data returned from the API
 '''
@@ -32,7 +32,7 @@ logging.basicConfig(filename=logpath,level=logging.DEBUG)
 def get_asin_list(c):
     asin_list = []
 
-    for row in c.execute('SELECT DISTINCT product_asin FROM purchase_tracking'):
+    for row in c.execute('SELECT DISTINCT product_asin FROM purchase_cache'):
         row = row[0].encode('utf-8')
         asin_list.append(row)
 
@@ -61,7 +61,7 @@ def call_API(asin):
 
 # Updated table using data returned from api
 def update_product_table(c, asin, title, call_date, price, img, url):
-    query = """INSERT INTO product_info 
+    query = """INSERT INTO product_cache
             (product_asin, product_name, date, price, medium_image_url, offer_url) 
             VALUES ('%s','%s','%s','%s','%s','%s')""" %(asin,title,call_date,price,img,url)
     c.execute(query)
@@ -74,7 +74,7 @@ def main():
     mb_database = sqlite3.connect(dbpath)
     c = mb_database.cursor()
 
-    # Get a list of asins from purchase_tracking table
+    # Get a list of asins from purchase_cache table
     asin_list = get_asin_list(c)
     successfully_updated= 0
 
