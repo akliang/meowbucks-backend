@@ -72,7 +72,7 @@ def update_product_table(c, asin, title, call_date, price, img, url):
 
 def main():
 
-    init_db.start()
+    init_db.start(dbpath)
 
     # Connect to sql database
     mb_database = sqlite3.connect(dbpath)

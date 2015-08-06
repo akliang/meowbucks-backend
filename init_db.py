@@ -2,10 +2,10 @@
 import sqlite3
 
 
-def start():
+def start(dbpath):
   # connect to sql database
   #mb_database = sqlite3.connect('/Users/Sherry/meowbucks/mb_databases/meow1.sqlite')
-  conn = sqlite3.connect('./meow1.sqlite')
+  conn = sqlite3.connect(dbpath)
   c = conn.cursor()
   
   # Uncomment below section if want to create tables purchases_tracking and product_info from scratch
