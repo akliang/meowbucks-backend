@@ -8,10 +8,24 @@ from amazon.api import AmazonAPI
 import sqlite3
 from datetime import date, datetime
 import logging
+import os
+import init_db
+
+if os.path.exists('/Users/Sherry/meowbucks/'):
+  homedir='/Users/Sherry/meowbucks'
+else:
+  homedir='.'
+logpath="%s/log_files/apicall_log_%s.log" % (homedir,datetime.now().strftime("%Y_%m_%d_%H_%M"))
+dbpath="%s/mb_databases/meow1.sqlite" % (homedir)
+
+print('Homedir: '+homedir)
+print('Logpath: '+logpath)
+print('DBpath:  '+dbpath)
+
+
 
 # Create daily log file
-logging.basicConfig(filename='/Users/Sherry/meowbucks/log_files/apicall_log_%s.log' %(datetime.now().strftime("%Y_%m_%d_%H_%M")),
-                    level=logging.DEBUG)
+logging.basicConfig(filename=logpath,level=logging.DEBUG)
 
 
 # Get a list of asins to send to api
@@ -58,23 +72,11 @@ def update_product_table(c, asin, title, call_date, price, img, url):
 
 def main():
 
+    init_db.start()
+
     # Connect to sql database
-    mb_database = sqlite3.connect('/Users/Sherry/meowbucks/mb_databases/mb_test_db.db')
+    mb_database = sqlite3.connect(dbpath)
     c = mb_database.cursor()
-
-    # Uncomment below section if want to create tables purchase_tracking and product_info from scratch
-    c.execute('''DROP TABLE IF EXISTS purchase_tracking''')
-    c.execute('''DROP TABLE IF EXISTS purchases_tracking''')
-    c.execute('''DROP TABLE IF EXISTS product_info''')
-
-    c.execute('''CREATE TABLE purchase_tracking
-                 (date tid integer primary key, emailid integer, product_asin text, product_name text, purchase_date integer, starting_price real)''')
-    c.execute("INSERT INTO purchase_tracking VALUES ('1', 'swagberry@meowbucks.com', 'B00QJDU3KY', 'Kindle', '3', '100')")
-    c.execute("INSERT INTO purchase_tracking VALUES ('2', 'swagberry@meowbucks.com', 'B00JP7R8X6', 'Kindle Cover', '2', '10')")
-
-    c.execute('''CREATE TABLE product_info
-                 (product_asin text, product_name text, date integer, price real, medium_image_url text, offer_url text, PRIMARY KEY (product_asin, date)
-    )''')
 
     # Get a list of asins from purchase_tracking table
     asin_list = get_asin_list(c)
@@ -103,3 +105,4 @@ def main():
 
 if __name__ == '__main__':
     main()
+
