@@ -1,6 +1,12 @@
 
 import sqlite3
+import os
+from amazon.api import AmazonAPI
+from datetime import date, datetime
 
+
+class amazonItem:
+    pass
 
 def reset_db(dbpath):
     # connect to sql database
@@ -69,14 +75,16 @@ def call_API(asin):
 def insert_into_table(c,table_name,resp):
     if table_name in ('product_history','product_cache'):
         price, asin, title, call_date, img, url = resp
-        query = """INSERT INTO product_cache
+        query = """INSERT INTO %s
                 (product_asin, product_name, date, price, medium_image_url, offer_url)
-                VALUES ('%s','%s','%s','%s','%s','%s')""" %(asin,title,call_date,price,img,url)
-    #elseif table_name in ('purchase_history', 'purchase_cache'):
+                VALUES ('%s','%s','%s','%s','%s','%s')""" %(table_name,asin,title,call_date,price,img,url)
+    elif table_name in ('purchase_history', 'purchase_cache'):
+        query = """INSERT INTO %s
+                (emailid,product_asin,purchase_date,starting_price)
+                VALUES ('%s','%s','%s','%s')""" %(table_name,resp.email,resp.asin,resp.purchase_date,resp.purchase_price)
 
     c.execute(query)
     return
-
 
 
 
