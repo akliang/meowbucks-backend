@@ -9,7 +9,7 @@ import sqlite3
 from datetime import date, datetime
 import logging
 import os
-import init_db
+import mbcommon as mbc
 
 if os.path.exists('/Users/Sherry/meowbucks/'):
     homedir = '/Users/Sherry/meowbucks'
@@ -78,7 +78,7 @@ def insert_into_table(c,table_name,resp):
 
 
 def main():
-    init_db.start(dbpath)
+    mbc.reset_db(dbpath)
 
     # Connect to sql database
     mb_database = sqlite3.connect(dbpath)
