@@ -6,7 +6,6 @@ from datetime import date, datetime
 import time
 import logging
 import os
-import init_db
 import re
 import mbcommon as mbc
 
@@ -30,7 +29,7 @@ def main():
 
 
     # safety check
-    resp=call_API(asin)
+    resp=mbc.call_API(asin)
     if resp:
         price, asin, title, call_date, img, url = resp
     else:
@@ -42,48 +41,23 @@ def main():
     if purchase_price is '':
         # pull price from Amazon?  pull from our product-history db?
         purchase_price = price
-        logging.warning("No purchase_price specified.... setting it to current price (%0.2f)" % purchase_price
+        logging.warning("No purchase_price specified.... setting it to current price (%0.2f)" % purchase_price)
 
     # assemble the array
+    item = mbc.amazonItem()
+    item.email=email
+    item.asin=asin
+    item.purchase_date=purchase_date
+    item.purchase_price=purchase_price
     
-
 
     # insert the data into the db
     mb_database = sqlite3.connect(dbpath)
     c = mb_database.cursor()
-    %insert_into_table(c,'purchase_history',
-    
-
-
-    init_db.start(dbpath)
-
-    # Connect to sql database
-
-    # Get a list of asins from purchase_cache table
-    asin_list = get_asin_list(c)
-    successfully_updated= 0
-
-    # Call api and update table
-    if len(asin_list) > 0:
-        for asin in asin_list:
-
-            resp = call_API(asin)
-            if resp:
-                #price, asin, title, call_date, img, url = resp
-                #update_product_table(c, asin, title, call_date, price, img, url)
-                insert_into_table(c,'product_history',resp)
-                insert_into_table(c,'product_cache',resp)
-                successfully_updated += 1
-            else:
-                logging.warning("Amazon did not find asin: %s" %(asin))
-                
-
-    logging.info('%s asins were sent to api. %s asins successfully updated product table.' 
-                %((len(asin_list)), successfully_updated))
-
-    # Close database
+    mbc.insert_into_table(c,'purchase_history',item)
     mb_database.commit()
     mb_database.close()
+    
 
 
 if __name__ == '__main__':
