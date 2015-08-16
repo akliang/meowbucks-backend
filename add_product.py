@@ -11,7 +11,7 @@ import mbcommon as mbc
 
 homedir = mbc.set_working_path()
 dbpath = "%s/mb_databases/mb_test_db.db" % (homedir)
-logpath = "%s/log_files/apicall_log_%s.log" % (homedir,datetime.now().strftime("%Y_%m_%d_%H_%M"))
+logpath = "%s/log_files/applog_%s.log" % (homedir,datetime.now().strftime("%Y%m%d"))
 
 
 # Create daily log file
@@ -27,21 +27,23 @@ def main():
     purchase_date = "1438894338"  # unix timestamp
     purchase_price = "99.99"
 
+    logging.debug("  add_product request: email=%s ; url=%s ; purchase_date = %s ; purchase_price = %s" % (email,url,purchase_date,purchase_price))
+
 
     # safety check
     resp=mbc.call_API(asin)
     if resp:
         price, asin, title, call_date, img, url = resp
     else:
-        logging.warning("Amazon did not find asin: %s" %(asin))
+        logging.warning("  Amazon did not find asin: %s" %(asin))
 
     if purchase_date is '':
         purchase_date="%d" % (time.time())
-        logging.warning("No purchase_date specified... setting it to now-time (%d)" % purchase_date)
+        logging.warning("  No purchase_date specified... setting it to now-time (%d)" % purchase_date)
     if purchase_price is '':
         # pull price from Amazon?  pull from our product-history db?
         purchase_price = price
-        logging.warning("No purchase_price specified.... setting it to current price (%0.2f)" % purchase_price)
+        logging.warning("  No purchase_price specified.... setting it to current price (%0.2f)" % purchase_price)
 
     # assemble the array
     item = mbc.amazonItem()
