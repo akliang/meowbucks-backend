@@ -131,7 +131,9 @@ if __name__ == "__main__":
 </html>
     """
  
-    TO = 'sherry415@gmail.com; albert.liang@gmail.com; kevin.cheng76@gmail.com'
+    #TO = 'sherry415@gmail.com; albert.liang@gmail.com; kevin.cheng76@gmail.com'
+    TO = "sonic_down@yahoo.com ; albert.liang@gmail.com, sherry415@gmail.com, kevin.cheng76@gmail.com"
+    TO2 = ['sonic_down@yahoo.com', 'albert.liang@gmail.com','sherry415@gmail.com','kevin.cheng76@gmail.com']
     FROM ='sherry.meowbucks@gmail.com'
  
     send_mail("Your Amazon Item Reduced in Price!", email_content, TO, FROM)
