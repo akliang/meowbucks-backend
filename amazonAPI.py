@@ -12,7 +12,7 @@ import mbcommon as mbc
 
 homedir = mbc.set_working_path()
 dbpath = "%s/mb_databases/mb_test_db.db" % (homedir)
-logpath = "%s/log_files/apicall_log_%s.log" % (homedir,datetime.now().strftime("%Y_%m_%d_%H_%M"))
+logpath = "%s/log_files/apicall_log_%s.log" % (homedir,datetime.now().strftime("%Y%m%d"))
 
 
 # Create daily log file
