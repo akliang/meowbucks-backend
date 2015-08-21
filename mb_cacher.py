@@ -21,6 +21,7 @@ logging.basicConfig(filename=logpath,level=logging.DEBUG)
 def query_cache(c,table):
     cachelist = []
 
+    #for row in c.execute('SELECT id,date FROM %s' % table):
     for row in c.execute('SELECT * FROM %s' % table):
         row = row[0].encode('utf-8')
         cachelist.append(row)
@@ -40,7 +41,10 @@ def main():
     icache = query_cache(c,'product_cache')
     if len(icache) > 0:
         for C in icache:
-            
+            print "hello %s %s" % (C[0],C[1])
+ 
+
+
 
     # Get a list of asins from purchase_cache table
     asin_list = get_asin_list(c)
