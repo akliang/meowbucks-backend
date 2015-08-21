@@ -59,10 +59,10 @@ def main():
     tmp = re.sub('!LOGINURL',url,tmp)
     tmp = re.sub('!EXPMIN',str(expmin),tmp)
    
-    #FROM ='hello@meowbucks.com'
-    #mbc.send_mail("Meowbucks - Login Link", tmp, email, FROM)
+    FROM ='hello@meowbucks.com'
+    mbc.send_mail("Meowbucks - Login Link", tmp, email, FROM)
     # temporary debug
-    print token
+    #print token
 
 
 if __name__ == '__main__':
