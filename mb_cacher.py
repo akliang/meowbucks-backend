@@ -1,70 +1,46 @@
 '''
-    Checks the *_cache tables to make sure the items are in the right place
-    Should run it once every 24 hours
+    Checks the purchase_cache tables and removed items that are older than 30 days
+    Should run it once every 24 hours (via cronjob?)
 '''
 
 import sqlite3
 from datetime import date, datetime
+import time
 import logging
 import mbcommon as mbc
 
 
 homedir = mbc.set_working_path()
 dbpath = "%s/mb_databases/mb_test_db.db" % (homedir)
-logpath = "%s/log_files/apicall_log_%s.log" % (homedir,datetime.now().strftime("%Y_%m_%d_%H_%M"))
+logpath = "%s/log_files/apicall_log_%s.log" % (homedir,datetime.now().strftime("%Y_%m_%d"))
 
 
 # Create daily log file
 logging.basicConfig(filename=logpath,level=logging.DEBUG)
 
-# Get a list of asins to send to api
-def query_cache(c,table):
-    cachelist = []
-
-    #for row in c.execute('SELECT id,date FROM %s' % table):
-    for row in c.execute('SELECT * FROM %s' % table):
-        row = row[0].encode('utf-8')
-        cachelist.append(row)
-
-    return cachelist
-
-
-
 
 
 def main():
+
+    # todays date plus 30 days
+    pdate = int(time.time()-30*24*60*60)
+    logging.info("mb_cacher.py -- Removing rows older than %d (%s) from purchase_cache" % (pdate,datetime.fromtimestamp(pdate).strftime('%Y-%m-%d %H:%M:%S')))
+
+
     # Connect to sql database
     mb_database = sqlite3.connect(dbpath)
     c = mb_database.cursor()
 
-    # check product_cache first
-    icache = query_cache(c,'product_cache')
-    if len(icache) > 0:
-        for C in icache:
-            print "hello %s %s" % (C[0],C[1])
- 
+    # test entries for development
+    #c.execute("insert into purchase_cache values(4,'hello@meowbucks.com','B00QJDU3KZ','','1437284338',50)")
+    #c.execute("insert into purchase_cache values(4,'hello@meowbucks.com','B00QJDU3KZ','','1437384338',50)")
+
+    t = (pdate,)
+    c.execute('DELETE FROM purchase_cache WHERE purchase_date < ?',t)
+    nrows = c.rowcount
+    logging.info("mb_cacher.py -- Removed %d item(s) from purchase_cache" % nrows)
 
 
-
-    # Get a list of asins from purchase_cache table
-    asin_list = get_asin_list(c)
-    successfully_updated= 0
-
-    # Call api and update table
-    if len(asin_list) > 0:
-        for asin in asin_list:
-
-            resp = mbc.call_API(asin)
-            if resp:
-                mbc.insert_into_table(c,'product_history',resp)
-                mbc.insert_into_table(c,'product_cache',resp)
-                successfully_updated += 1
-            else:
-                logging.warning("Amazon did not find asin: %s" %(asin))
-                
-
-    logging.info('%s asins were sent to api. %s asins successfully updated product table.' 
-                %((len(asin_list)), successfully_updated))
 
     # Close database
     mb_database.commit()
