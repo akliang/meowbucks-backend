@@ -56,8 +56,8 @@ def set_working_path():
 
 
 def call_API(asin):
-    AMAZON_ACCESS_KEY = 'AKIAJ2MUVQ36XFWLYUEA'
-    AMAZON_SECRET_KEY = '***REMOVED***z'
+    AMAZON_ACCESS_KEY = ''
+    AMAZON_SECRET_KEY = ''
     AMAZON_ASSOC_TAG = 'meowbucks-20'
 
     amazon = AmazonAPI(AMAZON_ACCESS_KEY, AMAZON_SECRET_KEY, AMAZON_ASSOC_TAG)
